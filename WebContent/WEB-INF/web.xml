@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+
+
+<servlet>
+<servlet-name>controller</servlet-name>
+<servlet-class>controllers.Controller</servlet-class>
+</servlet>
+
+<servlet>
+<servlet-name>datana</servlet-name>
+<servlet-class>controllers.Datana</servlet-class>
+</servlet>
+
+<servlet>
+<servlet-name>JDNIDataSource</servlet-name>
+<servlet-class>controllers.JDNIDataSource</servlet-class>
+</servlet>
+
+<servlet-mapping>
+<servlet-name>controller</servlet-name>
+<url-pattern>/controller</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+<servlet-name>datana</servlet-name>
+<url-pattern>/datana</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+<servlet-name>JDNIDataSource</servlet-name>
+<url-pattern>/jdni</url-pattern>
+</servlet-mapping>
+
+<description>JDNI connection</description>
+  <resource-ref>
+      <description>DB Connection</description>
+      <res-ref-name>jdbc/alien_x</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+  </resource-ref>
+
+
+</web-app>
