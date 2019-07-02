@@ -10,11 +10,55 @@
 <title>Index</title>
 </head>
 <body>
-<h1>This is the home page.</h1>
+<h6>This is the home page.</h6>
 <jsp:useBean id="account" class="beans.Accounts" scope="page" ></jsp:useBean>
-<c:out value="${account.number}" ></c:out>
+Index Token: <c:out value="${account.number}" ></c:out> <br>
 <a href="controller?action=login"> login </a> <br>
 <a href="controller?action=about"> about </a> <br>
+
+<%-- jstl show counter parameter if counter is more than 0 --%>
+<c:if test="${param.counter > 0}">
+
+
+<c:out value="${param.counter} "></c:out><br>
+
+</c:if>
+<%
+out.println("counter: "+request.getParameter("counter"));
+if (request.getParameter("counter")!=null) {
+	
+	Integer counter; 
+	try {
+		counter = Integer.parseInt(request.getParameter("counter").toString());
+	}catch (Exception e){
+		counter = 0;
+	}
+}
+%>
+
+<c:choose>
+
+	<c:when test="${param.id == 'james'}">
+		<p> The id is: <c:out value="${param.id} "></c:out> </p>
+	</c:when>
+	
+	<c:otherwise>
+		id: <c:out value="${param.id} "></c:out> <p>
+	</c:otherwise>
+</c:choose>
+
+<c:forEach var="i" begin="0" end="${param.counter}" varStatus="status" >
+
+<c:out value="${i}"></c:out>
+
+<c:if test="${status.first}">
+<p> first </p>
+</c:if>
+<c:if test="${status.last}">
+<p> last </p>
+</c:if>
+</c:forEach>
+
 
 </body>
 </html>
