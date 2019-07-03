@@ -148,7 +148,8 @@ public class Controller extends HttpServlet {
 	protected void managePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		ServletContext con = getServletContext();
-		HttpServletRequest req = request;
+		
+		
 		String action_name = request.getParameter("action");
 		String persistence = request.getParameter("persistence");
 		System.out.println("persistence:"+persistence);
@@ -162,8 +163,8 @@ public class Controller extends HttpServlet {
 			Accounts u = new Accounts();
 			u.setUsername(username);
 			u.setPassword(password);
-			request.setAttribute("username", username);
-			request.setAttribute("password", password);
+			//request.setAttribute("username", username);
+			//request.setAttribute("password", password);
 			
 			
 			//db check
@@ -182,11 +183,6 @@ public class Controller extends HttpServlet {
 						if (persistence!=null&&persistence.equalsIgnoreCase("servlet")) {
 							Accounts ax = u;
 							con.setAttribute("dummy", ax);
-						}
-						//dummy object for request level
-						if (persistence!=null&&persistence.equalsIgnoreCase("request")) {
-							Accounts az = u;
-							req.setAttribute("yummy", az);
 						}
 						//dummy object for cookie level
 						if (persistence!=null&&persistence.equalsIgnoreCase("cookie")) {

@@ -36,6 +36,7 @@ Choose persistence: <br>
 <input type="checkbox" name="persistence" value="cookie">Enable cookies<br>
 <input type="checkbox" name="persistence" value="servlet">Enable servlet context<br>
 <input type="checkbox" name="persistence" value="session">Enable session<br>
+
 *default is request<br> 
 <input type="submit" value="login">
 </form>

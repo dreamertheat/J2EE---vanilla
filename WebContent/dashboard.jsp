@@ -12,7 +12,8 @@
 		if (c.getName().equalsIgnoreCase("JSESSIONID")){
 			//request.getRequestDispatcher("controller").forward(request, response);
 			 request_session = c.getValue().toString();
-			out.print(request_session);
+			 pageContext.setAttribute("request_session", request_session);
+			//out.print(request_session);
 		}
 	} 
 		//request.getRequestDispatcher("controller").forward(request, response);
@@ -44,7 +45,6 @@ This is your dashboard.
 
 Attribute from HttpSession: <x:out value="${accounts.username}"></x:out><br>
 Attribute from ServletContext:<x:out value="${dummy.username}"></x:out><br>
-Attribute from HttpServletRequest:<x:out value="${yummy.username}"></x:out><br>
 Attribute from Cookie:<x:out value="${cookie.sunny.value}"></x:out><br>
 Attribute from URLencodeRequest:<x:out value="${request_session}"></x:out><br>
 
