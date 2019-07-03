@@ -124,7 +124,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("password", "");
 			request.setAttribute("login_message", "");
 			
-			callDispatcher("/login.jsp", request, response, false);
+			callDispatcher("WEB-INF/login.jsp", request, response, false);
 		}
 		else if (name.equalsIgnoreCase("logs")) {
 			//set cookies
@@ -137,11 +137,11 @@ public class Controller extends HttpServlet {
 			
 		}
 		else if (name.equalsIgnoreCase("about")) {
-			callDispatcher("/about.jsp", request, response, false);
+			callDispatcher("WEB-INF/about.jsp", request, response, false);
 		}
 		else if (name.equalsIgnoreCase("copyright")) {
 			System.out.println("from controller -> copyright");
-			callDispatcher("/copyright.jsp", request, response, false);
+			callDispatcher("WEB-INF/copyright.jsp", request, response, false);
 		}
 	}
 		
@@ -196,22 +196,22 @@ public class Controller extends HttpServlet {
 						else {
 							System.out.println("exists already!");
 						}
-						callDispatcher("/dashboard.jsp", request, response, true);
+						callDispatcher("WEB-INF/dashboard.jsp", request, response, true);
 					}
 					else {
 						request.setAttribute("login_message", "username/password not found!");
-						callDispatcher("/login.jsp", request, response, false);
+						callDispatcher("WEB-INF/login.jsp", request, response, false);
 					}
 				}
 				else {
 					request.setAttribute("login_message", u.getMessage());
-					callDispatcher("/login.jsp", request, response, false);
+					callDispatcher("WEB-INF/login.jsp", request, response, false);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				request.setAttribute("login_message", "username/password not found!");
-				callDispatcher("/login.jsp", request, response, false);
+				callDispatcher("WEB-INF/login.jsp", request, response, false);
 			}
 			
 		}

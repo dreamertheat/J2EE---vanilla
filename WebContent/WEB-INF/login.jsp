@@ -20,6 +20,7 @@ if (getServletContext().getAttribute("dummy")!=null) {
 <title>Login</title>
 </head>
 <body>
+<%@include file="header.jsp" %>
 
 <%
 

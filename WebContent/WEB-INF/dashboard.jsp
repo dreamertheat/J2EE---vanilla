@@ -7,16 +7,24 @@
 <head>
 <meta charset="ISO-8859-1">
 <%
-	String request_session = "";
-	for(Cookie c : request.getCookies()){
-		if (c.getName().equalsIgnoreCase("JSESSIONID")){
-			//request.getRequestDispatcher("controller").forward(request, response);
-			 request_session = c.getValue().toString();
-			 pageContext.setAttribute("request_session", request_session);
-			//out.print(request_session);
-		}
-	} 
-		//request.getRequestDispatcher("controller").forward(request, response);
+	
+
+	
+	//urlencoded cookie checker
+	if(request.getCookies()!=null) {
+		for(Cookie c : request.getCookies()){
+			if (c.getName().equalsIgnoreCase("JSESSIONID")){
+				//
+				 String request_session = c.getValue().toString();
+				 pageContext.setAttribute("request_session", request_session);
+				 if (c.getValue()==null) {
+					 request.getRequestDispatcher("controller").forward(request, response);
+				 }
+			}
+		} 
+	} else {
+		 request.getRequestDispatcher("controller").forward(request, response);
+	}
  	 
 %>
 <x:choose>
@@ -32,6 +40,7 @@
 %></title>
 </head>
 <body>
+<%@include file="header.jsp" %>
 
 
 
@@ -40,6 +49,7 @@ This is your dashboard.
 <a href="controller">go back to index.</a>
 <br>
 <a href="controller?action=logs">see logs here.</a>
+<a href="controller?action=logout">logout</a>
 
 <p> session : <%= session.getMaxInactiveInterval() %> </p><br>
 
