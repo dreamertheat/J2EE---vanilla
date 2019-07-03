@@ -8,5 +8,7 @@
 </head>
 <body>
 The quick brown fox jumps over the lazy dog.
+<%@include file="footer.jsp" %>
+
 </body>
 </html>

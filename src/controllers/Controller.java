@@ -38,6 +38,7 @@ public class Controller extends HttpServlet {
     
     @Override
     public void init() throws ServletException {
+    	System.out.println("init");
     	// TODO Auto-generated method stub
     	try {
 			InitialContext ic = new InitialContext();
@@ -54,16 +55,29 @@ public class Controller extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     
-    protected void callDispatcher (String name, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void callDispatcher (String name, HttpServletRequest request, HttpServletResponse response, boolean URLencode) throws ServletException, IOException {
+    	System.out.println("dispatcher name:"+name);
     	
-    	request.getRequestDispatcher(name).forward(request, response);
+    	if (URLencode) {
+    		System.out.println("url encoded!");
+    		String path = response.encodeRedirectURL(getServletContext().getContextPath())+name;
+			response.sendRedirect(path);
+    	}
+    	else {
+    		request.getRequestDispatcher(name).forward(request, response);
+    	}
+    	
 		manageDatabaseConnection(false, request,response);
+		
+		
 
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
+    	System.out.println("doGet");
+
 		manageDatabaseConnection(true, request,response);
 		manageRedirects(request, response);
 		//manageDatabaseConnection(false, request,response);
@@ -98,10 +112,10 @@ public class Controller extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		String name = request.getParameter("action");
-		
+		System.out.println("action parameter:"+name);
 		
 		if (name == null) {
-			callDispatcher("/index.jsp", request, response);
+			callDispatcher("/index.jsp", request, response, false);
 		}
 		else if (name.equalsIgnoreCase("login")) {
 			
@@ -110,7 +124,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("password", "");
 			request.setAttribute("login_message", "");
 			
-			callDispatcher("/login.jsp", request, response);
+			callDispatcher("/login.jsp", request, response, false);
 		}
 		else if (name.equalsIgnoreCase("logs")) {
 			//set cookies
@@ -123,16 +137,23 @@ public class Controller extends HttpServlet {
 			
 		}
 		else if (name.equalsIgnoreCase("about")) {
-			callDispatcher("/about.jsp", request, response);
+			callDispatcher("/about.jsp", request, response, false);
+		}
+		else if (name.equalsIgnoreCase("copyright")) {
+			System.out.println("from controller -> copyright");
+			callDispatcher("/copyright.jsp", request, response, false);
 		}
 	}
 		
 	protected void managePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		ServletContext con = getServletContext();
+		HttpServletRequest req = request;
 		String action_name = request.getParameter("action");
+		String persistence = request.getParameter("persistence");
+		System.out.println("persistence:"+persistence);
 		if (action_name == null) {
-			callDispatcher("/index.jsp", request, response);
+			callDispatcher("/index.jsp", request, response, false);
 		}
 		else if (action_name.equalsIgnoreCase("submitlogin")) {
 			String username = request.getParameter("username");
@@ -144,6 +165,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("username", username);
 			request.setAttribute("password", password);
 			
+			
 			//db check
 			ManageAccount a = new ManageAccount(conn);
 			
@@ -153,29 +175,47 @@ public class Controller extends HttpServlet {
 					
 					
 					if (a.login(username, password)) {
-						session.setAttribute("accounts", u);
+						if (persistence!=null&&persistence.equalsIgnoreCase("session")) {
+							session.setAttribute("accounts", u);
+						}
+						//dummy object for servlet/application/server level
+						if (persistence!=null&&persistence.equalsIgnoreCase("servlet")) {
+							Accounts ax = u;
+							con.setAttribute("dummy", ax);
+						}
+						//dummy object for request level
+						if (persistence!=null&&persistence.equalsIgnoreCase("request")) {
+							Accounts az = u;
+							req.setAttribute("yummy", az);
+						}
+						//dummy object for cookie level
+						if (persistence!=null&&persistence.equalsIgnoreCase("cookie")) {
+							Cookie cook = new Cookie("sunny",u.getUsername());
+							cook.setMaxAge(1500);
+							response.addCookie(cook);
+						}
 						//add new
 						if (!a.exists("accounts", "username", username))
 						a.newAccount("zzzzzz", "zzzzzz", "zzzzzz", "zzzzz", "zzzz");
 						else {
 							System.out.println("exists already!");
 						}
-						callDispatcher("/dashboard.jsp", request, response);
+						callDispatcher("/dashboard.jsp", request, response, true);
 					}
 					else {
 						request.setAttribute("login_message", "username/password not found!");
-						callDispatcher("/login.jsp", request, response);
+						callDispatcher("/login.jsp", request, response, false);
 					}
 				}
 				else {
 					request.setAttribute("login_message", u.getMessage());
-					callDispatcher("/login.jsp", request, response);
+					callDispatcher("/login.jsp", request, response, false);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				request.setAttribute("login_message", "username/password not found!");
-				callDispatcher("/login.jsp", request, response);
+				callDispatcher("/login.jsp", request, response, false);
 			}
 			
 		}

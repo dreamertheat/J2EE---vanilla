@@ -20,11 +20,12 @@ Index Token: <c:out value="${account.number}" ></c:out> <br>
 <c:if test="${param.counter > 0}">
 
 
-<c:out value="${param.counter} "></c:out><br>
+Counter is: <c:out value="${param.counter} "></c:out><br>
 
 </c:if>
+
 <%
-out.println("counter: "+request.getParameter("counter"));
+/* out.println("counter: "+request.getParameter("counter"));
 if (request.getParameter("counter")!=null) {
 	
 	Integer counter; 
@@ -33,32 +34,40 @@ if (request.getParameter("counter")!=null) {
 	}catch (Exception e){
 		counter = 0;
 	}
-}
+} */
 %>
 
 <c:choose>
-
-	<c:when test="${param.id == 'james'}">
-		<p> The id is: <c:out value="${param.id} "></c:out> </p>
+	<c:when test="${param.id != null}">
+		<c:choose>
+			<c:when test="${param.id == 'james'}">
+				<p> The id is: <c:out value="333"></c:out> </p>
+			</c:when>
+			
+			<c:otherwise>
+				Your id is: <c:out value="${param.id} "></c:out> <p>
+			</c:otherwise>
+		</c:choose>
 	</c:when>
-	
-	<c:otherwise>
-		id: <c:out value="${param.id} "></c:out> <p>
-	</c:otherwise>
 </c:choose>
 
-<c:forEach var="i" begin="0" end="${param.counter}" varStatus="status" >
+<c:if test="${param.counter>0}">
 
-<c:out value="${i}"></c:out>
-
-<c:if test="${status.first}">
-<p> first </p>
+	<c:forEach var="i" begin="0" end="${param.counter}" varStatus="status" >
+	
+		<c:if test="${status.first}">
+		<p> first </p>
+		</c:if>
+		
+		<c:out value="${i}"></c:out>
+		
+		<c:if test="${status.last}">
+		<p> last </p>
+		</c:if>
+		
+	</c:forEach>
+	
 </c:if>
-<c:if test="${status.last}">
-<p> last </p>
-</c:if>
-</c:forEach>
-
-
+<%@include file="footer.jsp" %>
 </body>
 </html>
