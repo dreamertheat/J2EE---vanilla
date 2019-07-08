@@ -40,7 +40,7 @@
 %></title>
 </head>
 <body>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
 
 
@@ -58,6 +58,6 @@ Attribute from ServletContext:<x:out value="${dummy.username}"></x:out><br>
 Attribute from Cookie:<x:out value="${cookie.sunny.value}"></x:out><br>
 Attribute from URLencodeRequest:<x:out value="${request_session}"></x:out><br>
 
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>
 </body>
 </html>

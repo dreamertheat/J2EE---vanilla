@@ -10,7 +10,7 @@
 <title>Index</title>
 </head>
 <body>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
 <h4>HOMEPAGE.</h4>
 <jsp:useBean id="account" class="beans.Accounts" scope="page" ></jsp:useBean>
@@ -70,6 +70,6 @@ if (request.getParameter("counter")!=null) {
 	</c:forEach>
 	
 </c:if>
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>
 </body>
 </html>

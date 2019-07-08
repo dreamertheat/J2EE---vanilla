@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+            <%@ include file="header.jsp" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,5 +32,11 @@ ISBN 978-0-9000000-0-0
 1. The main category of the book —History —Other category. 2. Another subject category —From one perspective. 3. More categories —And their modifiers. I. Johnson, Ben. II. Title.
 HF0000.A0 A00 2010
 299.000 00–dc22 2010999999
+
+
+
+<%-- <%@ include file="footer.jsp" %>
+ --%>
 </body>
+
 </html>

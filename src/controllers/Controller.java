@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -55,8 +57,14 @@ public class Controller extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     
-    protected void callDispatcher (String name, HttpServletRequest request, HttpServletResponse response, boolean URLencode) throws ServletException, IOException {
+    protected void callDispatcher (String name, HttpServletRequest request, HttpServletResponse response, boolean URLencode, boolean isJSP) throws ServletException, IOException {
     	System.out.println("dispatcher name:"+name);
+    	if(isJSP && URLencode) {
+    		
+    	}
+    	else if(isJSP) {
+    		name = "/WEB-INF"+name;
+    	}
     	
     	if (URLencode) {
     		System.out.println("url encoded!");
@@ -115,7 +123,7 @@ public class Controller extends HttpServlet {
 		System.out.println("action parameter:"+name);
 		
 		if (name == null) {
-			callDispatcher("/index.jsp", request, response, false);
+			callDispatcher("/index.jsp", request, response, false, false);
 		}
 		else if (name.equalsIgnoreCase("login")) {
 			
@@ -124,37 +132,59 @@ public class Controller extends HttpServlet {
 			request.setAttribute("password", "");
 			request.setAttribute("login_message", "");
 			
-			callDispatcher("WEB-INF/login.jsp", request, response, false);
+			callDispatcher("/login.jsp", request, response, false, true);
 		}
 		else if (name.equalsIgnoreCase("logs")) {
+			
+			
+			//scope variables
+			HttpSession session = request.getSession();
+			ServletContext context = getServletContext();
+			String logger = "This is the logger object.";
+			session.setAttribute("logger", logger+Math.random()*10);
+			context.setAttribute("logger", logger+Math.random()*10);
+			request.setAttribute("logger", logger+Math.random()*10);
+			Map <String, String> mapTest = new HashMap<String, String>();
+			mapTest.put("technology","ios");
+			mapTest.put("manufacturer","apple");
+			request.setAttribute("map", mapTest);
 			//set cookies
 			Cookie cook1 = new Cookie("code", ""+Math.random()*1231+1432);
-			Cookie cook2 = new Cookie("code2", ""+Math.random()*1231+1432);
 			response.addCookie(cook1);
-			response.addCookie(cook2);
-			String path = response.encodeRedirectURL(getServletContext().getContextPath())+"/logs.jsp";
-			response.sendRedirect(path);
+			
+			
+			/*
+			 * String path =
+			 * response.encodeRedirectURL(getServletContext().getContextPath())+
+			 * "/WEB-INF/logs.jsp"; response.sendRedirect(path);
+			 */
+			
+			//request.getRequestDispatcher("/WEB-INF/logs.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/logs.jsp").include(request, response);
+			//response.sendRedirect(getServletContext().getContextPath()+"/log_hack.jsp");
 			
 		}
 		else if (name.equalsIgnoreCase("about")) {
-			callDispatcher("WEB-INF/about.jsp", request, response, false);
+			callDispatcher("/about.jsp", request, response, false, true);
 		}
 		else if (name.equalsIgnoreCase("copyright")) {
 			System.out.println("from controller -> copyright");
-			callDispatcher("WEB-INF/copyright.jsp", request, response, false);
+			callDispatcher("/copyright.jsp", request, response, true, true);
 		}
 	}
 		
 	protected void managePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		ServletContext con = getServletContext();
-		
-		
 		String action_name = request.getParameter("action");
-		String persistence = request.getParameter("persistence");
-		System.out.println("persistence:"+persistence);
+		String[] persistence_array = request.getParameterValues("persistence");
+
+		/*
+		 * System.out.println("persistence:"+persistence);
+		 * System.out.println(persistence_array.length);
+		 */
 		if (action_name == null) {
-			callDispatcher("/index.jsp", request, response, false);
+			callDispatcher("/index.jsp", request, response, false, true);
 		}
 		else if (action_name.equalsIgnoreCase("submitlogin")) {
 			String username = request.getParameter("username");
@@ -176,42 +206,55 @@ public class Controller extends HttpServlet {
 					
 					
 					if (a.login(username, password)) {
-						if (persistence!=null&&persistence.equalsIgnoreCase("session")) {
-							session.setAttribute("accounts", u);
+						boolean encoded = true;
+						
+						if(persistence_array!=null)
+						for (String s : persistence_array) {
+							System.out.println(s);
+							
+							if (s.equalsIgnoreCase("session")) {
+								session.setAttribute("accounts", u);
+								encoded = true;
+							}
+							//dummy object for servlet/application/server level
+							if (s.equalsIgnoreCase("servlet")) {
+								Accounts ax = u;
+								con.setAttribute("dummy", ax);
+								encoded = true;
+							}
+							//dummy object for cookie level
+							if (s.equalsIgnoreCase("cookie")) {
+								Cookie cook = new Cookie("sunny",u.getUsername());
+								cook.setMaxAge(1500);
+								response.addCookie(cook);
+								encoded = true;
+							}
+							
 						}
-						//dummy object for servlet/application/server level
-						if (persistence!=null&&persistence.equalsIgnoreCase("servlet")) {
-							Accounts ax = u;
-							con.setAttribute("dummy", ax);
-						}
-						//dummy object for cookie level
-						if (persistence!=null&&persistence.equalsIgnoreCase("cookie")) {
-							Cookie cook = new Cookie("sunny",u.getUsername());
-							cook.setMaxAge(1500);
-							response.addCookie(cook);
-						}
+						
+						
 						//add new
 						if (!a.exists("accounts", "username", username))
 						a.newAccount("zzzzzz", "zzzzzz", "zzzzzz", "zzzzz", "zzzz");
 						else {
 							System.out.println("exists already!");
 						}
-						callDispatcher("WEB-INF/dashboard.jsp", request, response, true);
+						callDispatcher("/dashboard.jsp", request, response, encoded, true);
 					}
 					else {
 						request.setAttribute("login_message", "username/password not found!");
-						callDispatcher("WEB-INF/login.jsp", request, response, false);
+						callDispatcher("/login.jsp", request, response, false, true);
 					}
 				}
 				else {
 					request.setAttribute("login_message", u.getMessage());
-					callDispatcher("WEB-INF/login.jsp", request, response, false);
+					callDispatcher("/login.jsp", request, response, false, true);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				request.setAttribute("login_message", "username/password not found!");
-				callDispatcher("WEB-INF/login.jsp", request, response, false);
+				callDispatcher("/login.jsp", request, response, false, true);
 			}
 			
 		}

@@ -6,13 +6,13 @@
 
 <% 
 if (session.getAttribute("accounts")!=null) {
-	//request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+	request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 } 
 if (request.getCookies().length>0) {
-	//request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+	request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 } 
 if (getServletContext().getAttribute("dummy")!=null) {
-	//request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+	request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 }
 
 %>
@@ -20,7 +20,7 @@ if (getServletContext().getAttribute("dummy")!=null) {
 <title>Login</title>
 </head>
 <body>
-<%@include file="header.jsp" %>
+<%@include file="../header.jsp" %>
 
 <%
 
@@ -46,6 +46,6 @@ Choose persistence: <br>
 <%= request.getAttribute("login_message") %>
 </span>
 
-<%@include file="footer.jsp" %>
+<%@include file="../footer.jsp" %>
 </body>
 </html>
