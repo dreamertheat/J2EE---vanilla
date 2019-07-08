@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,10 +145,22 @@ public class Controller extends HttpServlet {
 			session.setAttribute("logger", logger+Math.random()*10);
 			context.setAttribute("logger", logger+Math.random()*10);
 			request.setAttribute("logger", logger+Math.random()*10);
+			//for maps
 			Map <String, String> mapTest = new HashMap<String, String>();
 			mapTest.put("technology","ios");
 			mapTest.put("manufacturer","apple");
+			mapTest.put("website","<a href='https://www.apple.com/ph/mac/'>Go to Apple</a>");
+			System.out.println(mapTest.get("website"));
 			request.setAttribute("map", mapTest);
+			
+			//for lists
+			ArrayList<String> animals = new ArrayList<String>();
+			animals.add("cat");
+			animals.add("dog");
+			animals.add("monkey");
+			animals.add("kangaroo");
+			session.setAttribute("animals", animals);
+			
 			//set cookies
 			Cookie cook1 = new Cookie("code", ""+Math.random()*1231+1432);
 			response.addCookie(cook1);
