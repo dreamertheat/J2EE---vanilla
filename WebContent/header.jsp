@@ -6,10 +6,9 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Header</title>
+<title>${sessionScope.title}</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/style/style.css">
 </head>
 <body>
 <br>
---------------------------------------------------------------<br>
-</body>
-</html>
+<div id="ownage">&nbsp;</div><br>

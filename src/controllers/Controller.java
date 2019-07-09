@@ -124,6 +124,7 @@ public class Controller extends HttpServlet {
 		System.out.println("action parameter:"+name);
 		
 		if (name == null) {
+			request.getSession().setAttribute("title", "index");
 			callDispatcher("/index.jsp", request, response, false, false);
 		}
 		else if (name.equalsIgnoreCase("login")) {
@@ -132,7 +133,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("username", "");
 			request.setAttribute("password", "");
 			request.setAttribute("login_message", "");
-			
+			request.getSession().setAttribute("title", "login");
 			callDispatcher("/login.jsp", request, response, false, true);
 		}
 		else if (name.equalsIgnoreCase("logs")) {
@@ -142,6 +143,7 @@ public class Controller extends HttpServlet {
 			HttpSession session = request.getSession();
 			ServletContext context = getServletContext();
 			String logger = "This is the logger object.";
+			session.setAttribute("title", "Logs List");
 			session.setAttribute("logger", logger+Math.random()*10);
 			context.setAttribute("logger", logger+Math.random()*10);
 			request.setAttribute("logger", logger+Math.random()*10);
@@ -178,9 +180,11 @@ public class Controller extends HttpServlet {
 			
 		}
 		else if (name.equalsIgnoreCase("about")) {
+			request.getSession().setAttribute("title", "about");
 			callDispatcher("/about.jsp", request, response, false, true);
 		}
 		else if (name.equalsIgnoreCase("copyright")) {
+			request.getSession().setAttribute("title", "copyright");
 			System.out.println("from controller -> copyright");
 			callDispatcher("/copyright.jsp", request, response, true, true);
 		}
@@ -252,6 +256,7 @@ public class Controller extends HttpServlet {
 						else {
 							System.out.println("exists already!");
 						}
+						request.getSession().setAttribute("title", "dashboard");
 						callDispatcher("/dashboard.jsp", request, response, encoded, true);
 					}
 					else {

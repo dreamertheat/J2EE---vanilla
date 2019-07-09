@@ -1,26 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+    
 <!DOCTYPE html>
 <html>
 <head>
 
 <% 
-if (session.getAttribute("accounts")!=null) {
+
+
+if (session.getAttribute("accounts")!=null||request.getCookies().length>0||getServletContext().getAttribute("dummy")!=null) {
 	request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 } 
-if (request.getCookies().length>0) {
-	request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-} 
-if (getServletContext().getAttribute("dummy")!=null) {
-	request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-}
+
 
 %>
 <meta charset="ISO-8859-1">
 <title>Login</title>
 </head>
 <body>
-<%@include file="../header.jsp" %>
+<c:import url="../header.jsp"/>
 
 <%
 
@@ -46,6 +45,6 @@ Choose persistence: <br>
 <%= request.getAttribute("login_message") %>
 </span>
 
-<%@include file="../footer.jsp" %>
+<c:import url="../footer.jsp"/>
 </body>
 </html>

@@ -2,14 +2,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="x" %>    
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
+
 <%
 	
 
-	
+	session.setAttribute("title", "dashboard");
 	//urlencoded cookie checker
 	if(request.getCookies()!=null) {
 		for(Cookie c : request.getCookies()){
@@ -35,13 +32,8 @@
 
 </x:choose>
 
-<title>Welcome, <%
-	//out.print(((Users )session.getAttribute("user")).getEmail());
-%></title>
-</head>
-<body>
-<%@include file="../header.jsp" %>
 
+<x:import url="../header.jsp"></x:import>
 
 
 This is your dashboard.
@@ -58,6 +50,5 @@ Attribute from ServletContext:<x:out value="${dummy.username}"></x:out><br>
 Attribute from Cookie:<x:out value="${cookie.sunny.value}"></x:out><br>
 Attribute from URLencodeRequest:<x:out value="${request_session}"></x:out><br>
 
-<%@include file="../footer.jsp" %>
-</body>
-</html>
+
+<x:import url="../footer.jsp"></x:import>

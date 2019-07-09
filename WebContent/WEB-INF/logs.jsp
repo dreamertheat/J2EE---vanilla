@@ -1,21 +1,13 @@
 <%@page import="org.apache.catalina.deploy.ContextService"%>
 <%@page import="beans.Users"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    
+
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="x" %>
    <x:set var="rand"> <%= java.lang.Math.random() * 100+15 %> </x:set>    
     
     <x:set var="loggers" value="${rand}" scope="page"  />
     
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>LOGS</title>
-</head>
-<body>
-<jsp:include page="../header.jsp"/>
+
+<x:import url="header.jsp"/>
 You can check logs here below.<br>
 
 <h1>Cookies and session</h1>
@@ -69,6 +61,4 @@ Website: ${requestScope.map["website"]}<br>
 </div>
 
 
-<jsp:include page="../footer.jsp"/>
-</body>
-</html>
+<x:import url="footer.jsp"/>
