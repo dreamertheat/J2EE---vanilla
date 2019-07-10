@@ -2,6 +2,8 @@
 <%@page import="beans.Users"%>
 
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="x" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="z" %>
+   
    <x:set var="rand"> <%= java.lang.Math.random() * 100+15 %> </x:set>    
     
     <x:set var="loggers" value="${rand}" scope="page"  />
@@ -57,6 +59,18 @@ Website: ${requestScope.map["website"]}<br>
 </div>
 
 
+<br>
+<h1> JSTL SQL</h1>
+
+<z:setDataSource var="ds" dataSource="jdbc/alien_x" user="root" />
+
+<z:query dataSource="${ds}" sql="select * from users" var="results"  />
+
+
+
+<x:forEach  var="users"  items="${results.rows}">
+	 ${users._id} - ${users.first_name} - ${users.last_name}  <br>
+</x:forEach>
 
 </div>
 
