@@ -1,9 +1,11 @@
 <%@page import="org.apache.catalina.deploy.ContextService"%>
 <%@page import="beans.Users"%>
 
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="x" %>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="z" %>
+   <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="x" %>
+   <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="z" %>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+   <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+   <%@ taglib tagdir="/WEB-INF/tags" prefix="im" %>
    <x:set var="rand"> <%= java.lang.Math.random() * 100+15 %> </x:set>    
     
     <x:set var="loggers" value="${rand}" scope="page"  />
@@ -34,7 +36,7 @@ else {
 %>
 
 <br><br>
-page: <x:out value="${loggers}"></x:out><br>
+page: <fmt:formatNumber maxFractionDigits="3" type="number" > <x:out value="${loggers}"/> </fmt:formatNumber><br>
 request: <x:out value="${requestScope.logger}"></x:out><br>
 session: <x:out value="${sessionScope.logger}"></x:out><br>
 application: <x:out value="${applicationScope.logger}"></x:out><br>
@@ -141,6 +143,13 @@ adds to itself
 
 
 </table>
+
+
+<h1> TAGS </h1>
+
+<h6>RANDOMIZER </h6>
+
+<im:randomizer number="777" fractions="4" />
 
 
 <x:import url="footer.jsp"/>
