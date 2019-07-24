@@ -22,7 +22,9 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import Database.ManageAccount;
+import Database.ManageLibrary;
 import beans.Accounts;
+import beans.Content;
 
 /**
  * Servlet implementation class Controller
@@ -30,7 +32,9 @@ import beans.Accounts;
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     DataSource ds;
+    DataSource ds2;
     Connection conn = null;
+    Connection conn2 = null;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,6 +51,7 @@ public class Controller extends HttpServlet {
 			InitialContext ic = new InitialContext();
 			Context env = (Context) ic.lookup("java:comp/env");
 			ds = (DataSource) env.lookup("jdbc/alien_x");
+			ds2 = (DataSource) env.lookup("jdbc/upl");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,7 +102,9 @@ public class Controller extends HttpServlet {
 		
 		if (open) {
 			try {
+				
 				conn = ds.getConnection();
+				conn2 = ds2.getConnection();
 				System.out.println("connected!");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -108,6 +115,7 @@ public class Controller extends HttpServlet {
 		else {
 			try {
 				conn.close();
+				conn2.close();
 				System.out.println("close");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -135,6 +143,29 @@ public class Controller extends HttpServlet {
 			request.setAttribute("login_message", "");
 			request.getSession().setAttribute("title", "login");
 			callDispatcher("/login.jsp", request, response, false, true);
+		}
+		
+		else if (name.equalsIgnoreCase("library")) {
+			
+			String master_param = request.getParameter("master");
+			ManageLibrary ml = new ManageLibrary(conn2);
+			ArrayList<Content> master = new ArrayList<Content>();
+			ArrayList<Content> branches = new ArrayList<Content>();
+			try {
+				master = ml.retrieveMaster("1 - Master", -1, -1, -1, 1);
+				if (master_param!=null) {
+					branches = ml.retrieveBranchContent(master_param, -1, -1, -1);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(master.size());
+			request.getSession().setAttribute("master", master);
+			request.getSession().setAttribute("branches", branches);
+			request.getRequestDispatcher("/WEB-INF/library.jsp").include(request, response);
+
+		
 		}
 		else if (name.equalsIgnoreCase("logs")) {
 			

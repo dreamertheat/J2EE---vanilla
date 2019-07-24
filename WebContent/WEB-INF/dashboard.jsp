@@ -40,8 +40,9 @@ This is your dashboard.
 <br>
 <a href="controller">go back to index.</a>
 <br>
-<a href="controller?action=logs">see logs here.</a>
-<a href="controller?action=logout">logout</a>
+<a href="controller?action=logs">see logs here. </a><br>
+<a href="controller?action=logout">logout </a><br>
+<a href="controller?action=library">library </a>
 
 <p> session : <%= session.getMaxInactiveInterval() %> </p><br>
 
